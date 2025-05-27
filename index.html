@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Website Builder Test</title>
+</head>
+<body>
+  <h1>Test AI Backend</h1>
+  <textarea id="prompt" rows="6" cols="60" placeholder="Enter your prompt here..."></textarea><br />
+  <button id="sendBtn">Send Prompt</button>
+
+  <h2>Response:</h2>
+  <pre id="response" style="background:#f0f0f0; padding:10px; max-width:600px; white-space: pre-wrap;"></pre>
+
+  <script>
+    const sendBtn = document.getElementById('sendBtn');
+    const promptInput = document.getElementById('prompt');
+    const responseOutput = document.getElementById('response');
+
+    sendBtn.addEventListener('click', async () => {
+      const prompt = promptInput.value.trim();
+      if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+
+      responseOutput.textContent = 'Loading...';
+
+      try {
+        const res = await fetch('https://ai-website-backend.vercel.app/api/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prompt })
+        });
+
+        if (!res.ok) {
+          responseOutput.textContent = `Error: ${res.status} ${res.statusText}`;
+          return;
+        }
+
+        const data = await res.json();
+        // Assuming the response contains the generated text in data.choices[0].message.content
+        const text = data.choices?.[0]?.message?.content || JSON.stringify(data, null, 2);
+        responseOutput.textContent = text;
+
+      } catch (err) {
+        responseOutput.textContent = 'Fetch error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
