@@ -41,7 +41,6 @@
         }
 
         const data = await res.json();
-        // Assuming the response contains the generated text in data.choices[0].message.content
         const text = data.choices?.[0]?.message?.content || JSON.stringify(data, null, 2);
         responseOutput.textContent = text;
 
