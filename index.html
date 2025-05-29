@@ -452,38 +452,21 @@
             codeEditor.textContent = ''; // Clear previous code
 
             try {
-  console.log("Sending request with prompt:", prompt); // Log the prompt being sent
-  
-  const response = await fetch('https://ai-website-backend-2lk8.onrender.com/api/generate', {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ 
-      prompt: prompt,
-    })
-  });
+                // Call your actual backend API
+                const response = await fetch('https://ai-website-backend-2lk8.onrender.com/api/generate', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        prompt: prompt,
+                        // Add other parameters if needed
+                    })
+                });
 
-  console.log("Received response status:", response.status); // Log the HTTP status
-  
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Error response body:", errorText);
-    throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
-  }
-
-  const data = await response.json();
-  console.log("Success response data:", data); // Log the successful response
-  return data;
-  
-} catch (error) {
-  console.error("Full fetch error:", {
-    name: error.name,
-    message: error.message,
-    stack: error.stack
-  });
-  throw error; // Re-throw after logging
-}
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
                 const data = await response.json();
                 
